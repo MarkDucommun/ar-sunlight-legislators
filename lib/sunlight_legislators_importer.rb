@@ -4,7 +4,7 @@ require_relative '../app/models/legislator'
 
 VALID_FIELDS = ["title", "firstname", "lastname", "birthdate",
                 "state", "in_office", "phone", "fax", "twitter_id",
-                "website", "webform","party"]
+                "website", "webform","party", "gender"]
 
 class SunlightLegislatorsImporter
   def self.import(filename)

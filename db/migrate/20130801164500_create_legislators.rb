@@ -15,6 +15,7 @@ class CreateLegislators < ActiveRecord::Migration
       t.string :website
       t.string :webform
       t.string :party
+      t.string :gender
     end
   end
 end
