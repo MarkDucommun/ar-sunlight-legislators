@@ -4,7 +4,7 @@ require_relative '../app/models/legislator'
 
 VALID_FIELDS = ["title", "firstname", "lastname", "birthdate",
                 "state", "in_office", "phone", "fax", "twitter_id",
-                "website", "webform"]
+                "website", "webform","party"]
 
 class SunlightLegislatorsImporter
   def self.import(filename)
@@ -33,10 +33,9 @@ class SunlightLegislatorsImporter
           legislator_hash[field.to_sym] = value
         end      
       end
-      puts
-      puts legislator_hash[:phone]
-      puts legislator_hash[:fax]
+      
       Legislator.create!(legislator_hash)
+      print '.'
     end
   end
 end

@@ -1,4 +1,4 @@
-require_relative '../../db/config'
+    require_relative '../../db/config'
 
 class Legislator < ActiveRecord::Base
   # validates :phone, format: { with: /\d{10}/}
@@ -21,5 +21,15 @@ class Legislator < ActiveRecord::Base
 
   def to_s
     "#{firstname} #{lastname}"
+  end
+
+  def self.get_legislators_for_state(state)
+    ["Senators:", "Representatives:"].each do |type|
+      puts type
+      people = Legislator.where(state: state, title: type[0,3]).order('lastname')
+      people.each do |person|
+        puts "  #{person.firstname} #{person.lastname} (#{person.party})"
+      end
+    end 
   end
 end
