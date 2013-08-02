@@ -1,7 +1,22 @@
 require 'rake'
 require 'rspec/core/rake_task'
 require_relative 'db/config'
+require_relative 'lib/sunlight_legislators_importer'
 
+desc "open a console"
+task "db:console" do
+  exec "irb -r ./app/app.rb"
+end
+
+desc "drop, create, migrate, populate"
+task "db:f_it" => ["db:drop","db:create","db:migrate","db:populate"] do
+  puts "done'd it"
+end
+
+desc "seed the database"
+task "db:populate" do
+  SunlightLegislatorsImporter.import("./db/data/legislators.csv")
+end
 
 desc "create the database"
 task "db:create" do

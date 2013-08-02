@@ -1,14 +1,42 @@
 require 'csv'
+require 'date'
+require_relative '../app/models/legislator'
+
+VALID_FIELDS = ["title", "firstname", "lastname", "birthdate",
+                "state", "in_office", "phone", "fax", "twitter_id",
+                "website", "webform"]
 
 class SunlightLegislatorsImporter
   def self.import(filename)
     csv = CSV.new(File.open(filename), :headers => true)
     csv.each do |row|
+      legislator_hash = {}
       row.each do |field, value|
-        # TODO: begin
-        raise NotImplementedError, "TODO: figure out what to do with this row and do it!"
-        # TODO: end
+        # raise NotImplementedError, "TODO: figure out what to do with this row and do it!"
+        if VALID_FIELDS.include?(field)
+          if field == "phone" || field == "fax"
+            m = value.match(/.?([2-9]\d{2}).*(\d{3}).*(\d{4})/)
+            unless m == nil
+              value = m[1] + m[2] + m[3]
+            end 
+          elsif field == "birthdate"
+            m = value.match(/(\d{1,2}).(\d{1,2}).(\d{4})/)
+            unless m == nil
+              value = m[3]
+              value += '0' if m[1].length == 1
+              value += m[1]
+              value += '0'
+              value += m[2] if m[2].length == 1
+            end
+            # value = Date.parse(value) unless value == nil
+          end
+          legislator_hash[field.to_sym] = value
+        end      
       end
+      puts
+      puts legislator_hash[:phone]
+      puts legislator_hash[:fax]
+      Legislator.create!(legislator_hash)
     end
   end
 end
