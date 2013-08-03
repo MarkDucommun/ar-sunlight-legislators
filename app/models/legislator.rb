@@ -48,5 +48,13 @@ class Legislator < ActiveRecord::Base
     end
   end
 
-  def 
+  def self.all_legislators_by_position
+    ["Senators:", "Representatives:"].each do |type|
+      puts "#{type} #{Legislator.where(title: type[0,3]).count}"
+    end
+  end
+
+  def self.delete_inactive_legislators
+    Legislator.where(in_office: false).destroy_all
+  end
 end
