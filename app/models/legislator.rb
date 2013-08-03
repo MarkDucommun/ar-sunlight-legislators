@@ -1,11 +1,9 @@
     require_relative '../../db/config'
 
 class Legislator < ActiveRecord::Base
-  # validates :phone, format: { with: /\d{10}/}
   validate :validate_phone
-  # validates :fax, format: { with: /\d{10}/}
   validate :validate_fax
-  validates_presence_of :title, :firstname, :lastname, :state, :state
+  validates_presence_of :title, :firstname, :lastname, :state
   
   def validate_phone
     unless :phone.present? && !:phone.match(/\d{10}/)
@@ -42,5 +40,13 @@ class Legislator < ActiveRecord::Base
     end
   end
 
-  def self.
+  def self.states_by_legislature_size
+    by_state = Legislator.select("count(*) as count_all").order("count_all DESC").group(:state).count
+    by_state.each do |state, count|
+      puts "#{state}: 2 Senators, #{count - 2} Representative(s)" unless count < 3
+      puts "#{state}: #{count} Representative(s)" unless count > 2
+    end
+  end
+
+  def 
 end
